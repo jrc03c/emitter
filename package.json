@@ -1,0 +1,8 @@
+{
+  "name": "emitter",
+  "version": "0.0.1",
+  "description": "helps enforce a \"props go down, events go up\" OOP pattern",
+  "main": "index.js",
+  "author": "jrc03c",
+  "license": "ISC"
+}
