@@ -13,6 +13,11 @@ class Emitter {
     })
   }
 
+  get wasDestroyed() {
+    const self = this
+    return self.#wasDestroyed
+  }
+
   on(obj, eventName, callback) {
     if (!(obj instanceof Emitter)) {
       throw new Error("`obj` must be an Emitter!")
@@ -24,7 +29,9 @@ class Emitter {
       throw new Error("This emitter was already destroyed!")
     }
 
-    if (!self.subscriptions) return null
+    if (obj.wasDestroyed) {
+      throw new Error("`obj` was already destroyed!")
+    }
 
     if (!obj.subscriptions[eventName]) {
       obj.subscriptions[eventName] = []
@@ -46,7 +53,6 @@ class Emitter {
       throw new Error("This emitter was already destroyed!")
     }
 
-    if (!self.subscriptions) return null
     if (!obj.subscriptions[eventName]) return self
 
     const index = obj.subscriptions[eventName].indexOf(callback)

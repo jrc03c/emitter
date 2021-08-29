@@ -49,7 +49,7 @@ test("", () => {
 
   expect(() => {
     c.on(a, "dead", () => {})
-  }).not.toThrow()
+  }).toThrow()
 
   expect(() => {
     a.emit("dead")
