@@ -56,4 +56,8 @@ test("", () => {
   expect(() => {
     a.emit("dead")
   }).toThrow()
+
+  expect(() => {
+    a.hasBeenDestroyed = false
+  }).toThrow()
 })

@@ -18,6 +18,10 @@ class Emitter {
     return self.#hasBeenDestroyed
   }
 
+  set hasBeenDestroyed(value) {
+    throw new Error("The `hasBeenDestroyed` property is read-only!")
+  }
+
   on(obj, eventName, callback) {
     if (!(obj instanceof Emitter)) {
       throw new Error("`obj` must be an Emitter!")
