@@ -30,7 +30,9 @@ test("", () => {
   c.emit("bar")
   expect(message).toBe("goodbye")
 
+  expect(a.hasBeenDestroyed).toBe(false)
   a.destroy()
+  expect(a.hasBeenDestroyed).toBe(true)
   expect(Object.keys(a.subscriptions).length).toBe(0)
   expect(Object.keys(b.subscriptions).length).toBe(0)
   expect(Object.keys(c.subscriptions).length).toBe(0)

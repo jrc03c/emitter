@@ -1,5 +1,5 @@
 class Emitter {
-  #wasDestroyed = false
+  #hasBeenDestroyed = false
   #listenersToDestroy = []
 
   constructor() {
@@ -13,9 +13,9 @@ class Emitter {
     })
   }
 
-  get wasDestroyed() {
+  get hasBeenDestroyed() {
     const self = this
-    return self.#wasDestroyed
+    return self.#hasBeenDestroyed
   }
 
   on(obj, eventName, callback) {
@@ -25,11 +25,11 @@ class Emitter {
 
     const self = this
 
-    if (self.#wasDestroyed) {
+    if (self.#hasBeenDestroyed) {
       throw new Error("This emitter was already destroyed!")
     }
 
-    if (obj.wasDestroyed) {
+    if (obj.hasBeenDestroyed) {
       throw new Error("`obj` was already destroyed!")
     }
 
@@ -49,7 +49,7 @@ class Emitter {
 
     const self = this
 
-    if (self.#wasDestroyed) {
+    if (self.#hasBeenDestroyed) {
       throw new Error("This emitter was already destroyed!")
     }
 
@@ -76,7 +76,7 @@ class Emitter {
   emit(eventName, payload) {
     const self = this
 
-    if (self.#wasDestroyed) {
+    if (self.#hasBeenDestroyed) {
       throw new Error("This emitter was already destroyed!")
     }
 
@@ -103,7 +103,7 @@ class Emitter {
       self.off(obj, eventName, callback)
     })
 
-    self.#wasDestroyed = true
+    self.#hasBeenDestroyed = true
   }
 
   destroy() {
