@@ -1,4 +1,7 @@
 class Emitter {
+  #wasDestroyed = false
+  #listenersToDestroy = []
+
   constructor() {
     const self = this
 
@@ -16,6 +19,11 @@ class Emitter {
     }
 
     const self = this
+
+    if (self.#wasDestroyed) {
+      throw new Error("This emitter was already destroyed!")
+    }
+
     if (!self.subscriptions) return null
 
     if (!obj.subscriptions[eventName]) {
@@ -23,6 +31,7 @@ class Emitter {
     }
 
     obj.subscriptions[eventName].push(callback)
+    self.#listenersToDestroy.push({ obj, eventName, callback })
     return self
   }
 
@@ -32,16 +41,39 @@ class Emitter {
     }
 
     const self = this
+
+    if (self.#wasDestroyed) {
+      throw new Error("This emitter was already destroyed!")
+    }
+
     if (!self.subscriptions) return null
     if (!obj.subscriptions[eventName]) return self
 
     const index = obj.subscriptions[eventName].indexOf(callback)
     obj.subscriptions[eventName].splice(index, 1)
+
+    if (obj.subscriptions[eventName].length === 0) {
+      delete obj.subscriptions[eventName]
+    }
+
+    self.#listenersToDestroy = self.#listenersToDestroy.filter(item => {
+      return !(
+        item.obj === obj &&
+        item.eventName === eventName &&
+        item.callback === callback
+      )
+    })
+
     return self
   }
 
   emit(eventName, payload) {
     const self = this
+
+    if (self.#wasDestroyed) {
+      throw new Error("This emitter was already destroyed!")
+    }
+
     if (!self.subscriptions) return null
     if (!self.subscriptions[eventName]) return self
 
@@ -55,7 +87,17 @@ class Emitter {
   set shouldDestroySelf(value) {
     if (!value) return
     const self = this
-    self.subscriptions = null
+
+    Object.keys(self.subscriptions).forEach(channel => {
+      delete self.subscriptions[channel]
+    })
+
+    self.#listenersToDestroy.forEach(item => {
+      const { obj, eventName, callback } = item
+      self.off(obj, eventName, callback)
+    })
+
+    self.#wasDestroyed = true
   }
 
   destroy() {
