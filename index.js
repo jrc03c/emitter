@@ -97,6 +97,11 @@ class Emitter {
   set shouldDestroySelf(value) {
     if (!value) return
     const self = this
+    self.destroy()
+  }
+
+  destroy() {
+    const self = this
 
     Object.keys(self.subscriptions).forEach(channel => {
       delete self.subscriptions[channel]
@@ -108,11 +113,6 @@ class Emitter {
     })
 
     self.#hasBeenDestroyed = true
-  }
-
-  destroy() {
-    const self = this
-    self.shouldDestroySelf = true
     return null
   }
 }
