@@ -19,7 +19,9 @@ class Emitter {
   }
 
   set hasBeenDestroyed(value) {
-    throw new Error("The `hasBeenDestroyed` property is read-only!")
+    throw new Error(
+      "The `hasBeenDestroyed` property is read-only! To destroy an Emitter, call its `.destroy()` method."
+    )
   }
 
   on(obj, eventName, callback) {
