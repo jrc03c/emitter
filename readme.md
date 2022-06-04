@@ -7,7 +7,7 @@ npm install --save @jrc03c/emitter
 The `Emitter` class defined here is useful for enforcing a "props go down, events go up" OOP pattern. One can start by listening for events, for example:
 
 ```js
-const Emitter = require("emitter")
+const Emitter = require("@jrc03c/emitter")
 const a = new Emitter()
 const b = new Emitter()
 
